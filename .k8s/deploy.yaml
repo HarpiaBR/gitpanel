@@ -45,6 +45,9 @@ spec:
           image: <IMAGE-APP>
           ports:
             - containerPort: 80
+          envFrom:
+            -   secretRef:
+                  name: gitpanel-secret
       imagePullSecrets:
         - name: github-registry
 ---

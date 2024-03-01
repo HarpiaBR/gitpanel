@@ -38,7 +38,7 @@ jobs:
         run: sed -i 's|<NAMESPACE>|harpiatech|' $GITHUB_WORKSPACE/.k8s/deploy.yaml
 
       - name: Update deployment file ENV
-        run: sed -i 's|<ENV>|hmg|' $GITHUB_WORKSPACE/.k8s/deploy.yaml
+        run: sed -i 's|<ENV>|prod|' $GITHUB_WORKSPACE/.k8s/deploy.yaml
 
       - name: Deploy
         uses: neosec-com/kubectl-aws-eks@1.1.2
