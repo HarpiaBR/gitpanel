@@ -10,4 +10,5 @@ COPY oauth.php dist/gitpanel/
 
 # estágio de produção
 FROM php:7.4.33-apache as production-stage
+RUN a2enmod rewrite
 COPY --from=build-stage /app/dist/gitpanel /var/www/html
