@@ -8,4 +8,4 @@ RUN npm run build --prod
 
 # estágio de produção
 FROM php:7.4.33-apache as production-stage
-COPY --from=build-stage /app/dist /var/www/html
+COPY --from=build-stage /app/dist/gitpanel /var/www/html
