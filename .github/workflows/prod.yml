@@ -22,7 +22,7 @@ jobs:
       - name: Update SHA
         run: mkdir $GITHUB_WORKSPACE/site && touch $GITHUB_WORKSPACE/site/_meta && echo $GITHUB_SHA::7 > $GITHUB_WORKSPACE/site/_meta
 
-      - name: Build container front nginx
+      - name: Build container app
         run: docker build -t ghcr.io/harpiabr/gitpanel/app:$(echo $GITHUB_SHA::7 | head -c7) . --target production-stage
 
       - name: Docker Login

@@ -4,7 +4,7 @@ RUN apk add --update --no-cache python2 py-pip
 WORKDIR /app
 COPY . .
 RUN npm install
-RUN npm run build --prod --base-href ./
+RUN npm run build --prod
 COPY .htaccess dist/gitpanel/
 COPY oauth.php dist/gitpanel/
 
