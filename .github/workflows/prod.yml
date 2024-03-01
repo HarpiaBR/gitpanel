@@ -1,0 +1,55 @@
+name: Build/Deploy PROD
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  build:
+    name: Deploy PROD
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: neosec-com/kubectl-aws-eks@1.1.2
+
+      - name: Checkout master
+        uses: actions/checkout@v1.2.0
+
+      - name: Update SHA
+        run: mkdir $GITHUB_WORKSPACE/site && touch $GITHUB_WORKSPACE/site/_meta && echo $GITHUB_SHA::7 > $GITHUB_WORKSPACE/site/_meta
+
+      - name: Build container front nginx
+        run: docker build -t ghcr.io/harpiabr/gitpanel/app:$(echo $GITHUB_SHA::7 | head -c7) . --target production-stage
+
+      - name: Docker Login
+        run: docker login ghcr.io -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push image to Registry app
+        run: docker push ghcr.io/harpiabr/gitpanel/app:$(echo $GITHUB_SHA::7 | head -c7)
+
+      - name: Update deployment app
+        run: TAG=$(echo $GITHUB_SHA::7 | head -c7) && sed -i 's|<IMAGE-APP>|ghcr.io/harpiabr/gitpanel/app:'${TAG}'|' $GITHUB_WORKSPACE/.k8s/deploy.yaml
+
+      - name: Update deployment file NAMESPACE
+        run: sed -i 's|<NAMESPACE>|harpiatech|' $GITHUB_WORKSPACE/.k8s/deploy.yaml
+
+      - name: Update deployment file ENV
+        run: sed -i 's|<ENV>|hmg|' $GITHUB_WORKSPACE/.k8s/deploy.yaml
+
+      - name: Deploy
+        uses: neosec-com/kubectl-aws-eks@1.1.2
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_HMG }}
+        with:
+          args: kubectl apply -f $GITHUB_WORKSPACE/.k8s/deploy.yaml
+
+      - name: Verify deployment app
+        uses: neosec-com/kubectl-aws-eks@1.1.2
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_HMG }}
+        with:
+          args: kubectl rollout status deployment/gitpanel -n harpiatech
