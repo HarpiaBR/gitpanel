@@ -1,9 +1,7 @@
 <?php
-    $config = parse_ini_file('./.env');
-
     $url            = 'https://github.com/login/oauth/access_token';
-    $clientId       = $config["CLIENT_ID"];
-    $clientSecret   = $config["CLIENT_SECRET"];
+    $clientId       = getenv("CLIENT_ID");
+    $clientSecret   = getenv("CLIENT_SECRET");
 
     $postsFields                = new \stdClass();
     $postsFields->client_id     = $clientId;
