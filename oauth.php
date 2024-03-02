@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', true);
 $url = 'https://github.com/login/oauth/access_token';
 $clientId = getenv("CLIENT_ID");
 $clientSecret = getenv("CLIENT_SECRET");
