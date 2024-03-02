@@ -1,5 +1,4 @@
 <?php
-ini_set('display_errors', true);
 $url = 'https://github.com/login/oauth/access_token';
 $clientId = getenv("CLIENT_ID");
 $clientSecret = getenv("CLIENT_SECRET");
@@ -27,9 +26,11 @@ try {
   $response = json_decode(curl_exec($ch));
   $error = curl_error($ch);
 
+  echo "Location: https://" . $_SERVER['HTTP_HOST'] . "/#/checkToken/" . $response->access_token;die;
+  
   curl_close($ch);
   header("Location: https://" . $_SERVER['HTTP_HOST'] . "/#/checkToken/" . $response->access_token);
   // header("Location: http://localhost:4200/#/checkToken/" . $response->access_token);
 } catch (\Exception $ex) {
-  echo $ex->getMessage();die;
+  return [];
 }
