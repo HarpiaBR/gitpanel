@@ -26,8 +26,9 @@ try {
   $response = json_decode(curl_exec($ch));
   $error = curl_error($ch);
 
+  echo $clientId.'----'.$clientSecret.'----';
   echo "Location: https://" . $_SERVER['HTTP_HOST'] . "/#/checkToken/" . $response->access_token;die;
-  
+
   curl_close($ch);
   header("Location: https://" . $_SERVER['HTTP_HOST'] . "/#/checkToken/" . $response->access_token);
   // header("Location: http://localhost:4200/#/checkToken/" . $response->access_token);
