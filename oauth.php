@@ -31,5 +31,5 @@ try {
   header("Location: https://" . $_SERVER['HTTP_HOST'] . "/#/checkToken/" . $response->access_token);
   // header("Location: http://localhost:4200/#/checkToken/" . $response->access_token);
 } catch (\Exception $ex) {
-  return array();
+  echo $ex->getMessage();die;
 }
