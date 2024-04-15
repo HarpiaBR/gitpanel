@@ -67,7 +67,7 @@ metadata:
     nginx.ingress.kubernetes.io/large_client_header_buffers: "8 128k"
 spec:
   rules:
-    - host: gitpanel.harpia.tech
+    - host: gitpanel.dataverso.net
       http:
         paths:
           - path: /
